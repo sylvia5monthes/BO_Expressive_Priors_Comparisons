@@ -3,7 +3,7 @@ Working repo for the LCLS Cu line injector NN surrogate model for ML testing
 
 ## Environment
 ```bash
-$ conda env create -f environment.yml
+$ conda env create -f injmodel.yml
 ```
 
 ## Basic Usage
