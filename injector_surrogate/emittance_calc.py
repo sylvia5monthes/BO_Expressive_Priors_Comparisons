@@ -52,14 +52,12 @@ def getNormEmit(energy, quad_vals, xrms, yrms):
     k = getK1(b1_gradient, energy)
 
     sig_11, sig_12, sig_22 = fitSigma(xrms, k)
-    emitx= getEmit(sig_11, sig_12, sig_22)
+    emitx = getEmit(sig_11, sig_12, sig_22)
 
     sig_11, sig_12, sig_22 = fitSigma(yrms, k)
-    emity= getEmit(sig_11, sig_12, sig_22)
+    emity = getEmit(sig_11, sig_12, sig_22)
 
-    if emitx==1000 or emity==1000:
-       return 1000
+    if emitx == 1000 or emity == 1000:
+        return 1000
 
     return np.sqrt(emitx*gamma * emity*gamma)
-
-
