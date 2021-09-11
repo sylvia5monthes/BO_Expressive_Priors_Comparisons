@@ -28,14 +28,14 @@ def getGroundTruth(Model,ref_point,varx,vary,varz):
     x_in[:, Model.loc_in[opt_var_names[0]]] = varx
     x_in[:, Model.loc_in[opt_var_names[1]]] = vary
     x_in[:, Model.loc_in[opt_var_names[2]]] = varz
-
+   
     #output predictions
     y_out = Model.pred_machine_units(x_in) 
     
     #output is geometric emittance in transverse plane
     emitx = y_out[:,Model.loc_out['norm_emit_x']] #grab norm_emit_x out of the model
     emity = y_out[:,Model.loc_out['norm_emit_y']] #grab norm_emit_y out of the model
-    
+
     return np.sqrt(emitx*emity)
 
 def getBeamsize(Model,ref_point,varx,vary,varz,varscan): 
