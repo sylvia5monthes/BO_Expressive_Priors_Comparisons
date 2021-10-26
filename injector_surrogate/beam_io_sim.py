@@ -16,5 +16,5 @@ Model.take_log_out = False
 
 energy = 0.135
 
-def get_sizes(quad):
-    return get_beamsize(Model, ref_point, 0.5657 , -0.01063 ,-0.01  , quad)
+def get_sizes(quad, p1=0.5657, p2= -0.01063, p3=-0.01):
+    return get_beamsize(Model, ref_point, p1, p2, p3, quad)

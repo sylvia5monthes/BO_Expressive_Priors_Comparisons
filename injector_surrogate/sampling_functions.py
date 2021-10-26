@@ -43,8 +43,8 @@ def get_beamsize(Model,ref_point,varx,vary,varz,varscan):
     for given settings of SOL1, SQ01, CQ01 and scanning quad QE04 '''
         
     #convert to machine units
-    ref_point = Model.sim_to_machine(np.asarray(ref_point))
-    
+    ref_point = Model.sim_to_machine(np.asarray(ref_point))      
+
     #make input array of length model_in_list (inputs model takes)
     x_in = np.empty((1,len(Model.model_in_list)))
 
