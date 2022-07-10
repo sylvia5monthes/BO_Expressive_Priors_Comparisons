@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+
 import tensorflow as tf
 import tensorflow.keras as keras
 
@@ -27,12 +30,69 @@ from sklearn.preprocessing import RobustScaler,MinMaxScaler
 
 
 
+class Surrogate_NN_PyTorch(nn.Module):
+    def __init__(self, model=None):
+        super(Surrogate_NN_PyTorch, self).__init__()
+        
+        self.modules = []
 
+        if model != None: 
+            for layer in model.model_1.layers:  
+                config = layer.get_config()
+                weights = layer.get_weights()
+
+                if (isinstance(layer,Dense)):
+                    w = torch.as_tensor(weights[0])
+                    b = torch.as_tensor(weights[1])
+
+                    linear = nn.Linear(w.shape[0], 
+                                        w.shape[1], 
+                                        bias=config["use_bias"])
+
+                    with torch.no_grad():
+                        linear.weight = torch.nn.Parameter(w.transpose(0,1))
+                        linear.bias = torch.nn.Parameter(b)
+
+                    self.modules.append(linear) 
+
+                    # activation function
+                    if (config["activation"]=='elu'):
+                        self.modules.append(nn.ELU())
+
+                elif (isinstance(layer,Dropout)):
+                    self.modules.append(nn.Dropout(p=config["rate"]))
+
+                elif (isinstance(layer,InputLayer) == False):
+                    print("error")
+        
+        self.network = nn.Sequential(*self.modules)
+    
+    def forward(self, x):
+        y = self.network(x)
+        return y
+    
+class MinMaxScaler_PyTorch(object):
+    def __init__(self, transformer):
+        super(MinMaxScaler_PyTorch, self).__init__()
+        self.scale = torch.as_tensor(transformer.scale_)
+        self.min = torch.as_tensor(transformer.min_)
+
+    def transform(self, x): 
+        x *= self.scale
+        x += self.min
+        return x
+    
+    def inverse_transform(self, x):
+        x -= self.min
+        x /= self.scale
+        return x
+    
 class Surrogate_NN:
     
     def __init__(self, model_info_file = '../configs/model_info.json',
                  pv_info_file = '../configs/pvinfo.json',
-                 take_log_out= False
+                 take_log_out = False, 
+                 pytorch = False
                 ):
         
         
@@ -79,6 +139,7 @@ class Surrogate_NN:
         self.input_mins = input_mins
         self.input_maxs = input_maxs
         self.take_log_out = take_log_out
+        self.pytorch = pytorch
         
         self.debug = False
         
@@ -100,19 +161,30 @@ class Surrogate_NN:
                 return y
         
     def pred_machine_units(self, x):
+            """
+            x has shape (num_samples, num_param) 
+            returns either numpy array or tensor (if using pytorch model) 
+            """ 
 
-            x_s = np.copy(x)
-            
+            col = []
+            scale = []
             for i in range(0,len(self.model_in_list)):
-                x_s[:,self.loc_in[self.model_in_list[i]]] =  x[:,self.loc_in[self.model_in_list[i]]] * self.pv_to_sim_factor[self.sim_name_to_pv_name[self.model_in_list[i]]]
-
+                col.append(self.loc_in[self.model_in_list[i]])
+                scale.append(self.pv_to_sim_factor[self.sim_name_to_pv_name[self.model_in_list[i]]])
+            
+            scale = torch.as_tensor(scale) if self.pytorch == True else np.asarray(scale)
+            
+            x[:,col] =  x[:,col] * scale
+            
             if self.debug:
-                print('small scale units',x_s)
+                print('small scale units',x)
 
             #scale for NN pred
+    
+            x = self.transformer_x.transform(x)
+        
+            y = self.model_1(x.float()) if self.pytorch == True else self.model_1.predict(x)
             
-            x_s =  self.transformer_x.transform(x_s)
-            y = self.model_1.predict(x_s)
             y = self.transformer_y.inverse_transform(y)
             
             if self.take_log_out == True:
@@ -129,18 +201,27 @@ class Surrogate_NN:
 
         
     def load_saved_model(self, model_path = './', model_name = 'model_OTR2_NA_rms_emit_elu_2021-07-19T09_09_10-07_00'):
-        
-            self.model_1 = load_model(model_path + model_name +'.h5')
-            self.savepath = model_path +'figures/'
             
+            if self.pytorch == True:
+                self.model_1 = torch.load(model_path + model_name + '.pth')
+                self.model_1.eval()
+                
+            else: 
+                self.model_1 = load_model(model_path + model_name +'.h5')
+                self.savepath = model_path +'figures/'
+
     def load_scaling(self,scalerfilex = '../data/transformer_x.sav', scalerfiley = '../data/transformer_y.sav'):
         
             
             if scalerfilex[-3:] == 'sav':
             
                 self.transformer_x = pickle.load(open(scalerfilex, 'rb'))
-
                 self.transformer_y = pickle.load(open(scalerfiley, 'rb'))
+                
+            elif scalerfilex[-3:] == 'pth':
+                
+                self.transformer_x = torch.load(scalerfilex)
+                self.transformer_y = torch.load(scalerfiley)
                 
                 
     ## functions to convert between sim and machine units for data
