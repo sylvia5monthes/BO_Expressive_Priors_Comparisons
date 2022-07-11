@@ -28,65 +28,8 @@ from IPython.display import clear_output
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler,MinMaxScaler
 
+from pytorch_surrogate_model import *
 
-
-class Surrogate_NN_PyTorch(nn.Module):
-    def __init__(self, model=None):
-        super(Surrogate_NN_PyTorch, self).__init__()
-        
-        self.modules = []
-
-        if model != None: 
-            for layer in model.model_1.layers:  
-                config = layer.get_config()
-                weights = layer.get_weights()
-
-                if (isinstance(layer,Dense)):
-                    w = torch.as_tensor(weights[0])
-                    b = torch.as_tensor(weights[1])
-
-                    linear = nn.Linear(w.shape[0], 
-                                        w.shape[1], 
-                                        bias=config["use_bias"])
-
-                    with torch.no_grad():
-                        linear.weight = torch.nn.Parameter(w.transpose(0,1))
-                        linear.bias = torch.nn.Parameter(b)
-
-                    self.modules.append(linear) 
-
-                    # activation function
-                    if (config["activation"]=='elu'):
-                        self.modules.append(nn.ELU())
-
-                elif (isinstance(layer,Dropout)):
-                    self.modules.append(nn.Dropout(p=config["rate"]))
-
-                elif (isinstance(layer,InputLayer) == False):
-                    print("error")
-        
-        self.network = nn.Sequential(*self.modules)
-    
-    def forward(self, x):
-        y = self.network(x)
-        return y
-    
-class MinMaxScaler_PyTorch(object):
-    def __init__(self, transformer):
-        super(MinMaxScaler_PyTorch, self).__init__()
-        self.scale = torch.as_tensor(transformer.scale_)
-        self.min = torch.as_tensor(transformer.min_)
-
-    def transform(self, x): 
-        x *= self.scale
-        x += self.min
-        return x
-    
-    def inverse_transform(self, x):
-        x -= self.min
-        x /= self.scale
-        return x
-    
 class Surrogate_NN:
     
     def __init__(self, model_info_file = '../configs/model_info.json',
@@ -204,6 +147,7 @@ class Surrogate_NN:
             
             if self.pytorch == True:
                 self.model_1 = torch.load(model_path + model_name + '.pth')
+                self.model_1.requires_grad = False
                 self.model_1.eval()
                 
             else: 
