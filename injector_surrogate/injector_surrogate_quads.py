@@ -147,7 +147,7 @@ class Surrogate_NN:
             
             if self.pytorch == True:
                 self.model_1 = torch.load(model_path + model_name + '.pth')
-                self.model_1.requires_grad = False
+                self.model_1.requires_grad_(False)
                 self.model_1.eval()
                 
             else: 
