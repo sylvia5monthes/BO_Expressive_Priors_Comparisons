@@ -5,8 +5,12 @@ from tensorflow.keras.layers import InputLayer, Dense, Dropout
 
 class Surrogate_NN_PyTorch(nn.Module):
     def __init__(self, model=None):
+        """
+        creates Pytorch version of specified model 
+        :param model: the model to be recreated 
+        """
         super(Surrogate_NN_PyTorch, self).__init__()
-        
+
         self.modules = []
 
         if model != None: 
@@ -43,9 +47,14 @@ class Surrogate_NN_PyTorch(nn.Module):
     def forward(self, x):
         y = self.network(x)
         return y
-    
+
+
 class MinMaxScaler_PyTorch(object):
     def __init__(self, transformer):
+        """
+        creates Pytorch version of specified MinMaxScaler: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html 
+        :param transformer: the MinMaxScaler object to be recreated 
+        """
         super(MinMaxScaler_PyTorch, self).__init__()
         self.scale = torch.tensor(transformer.scale_)
         self.min = torch.tensor(transformer.min_)

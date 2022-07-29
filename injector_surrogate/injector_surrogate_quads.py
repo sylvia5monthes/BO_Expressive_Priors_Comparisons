@@ -28,7 +28,7 @@ from IPython.display import clear_output
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler,MinMaxScaler
 
-from pytorch_surrogate_model import *
+from pytorch_injector_surrogate_model import *
 
 class Surrogate_NN:
     
