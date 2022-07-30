@@ -19,7 +19,7 @@ $ conda conda create --name injmodel --file injmodel.txt
 
 ### [Results](https://github.com/sylvia5monthes/lcls_cu_injector_ml_model/tree/main/injector_surrogate/results) Terminology 
 - **grid<num_samples_per_variable>^9.pt** stores the <num_samples_per_variable>^9 meshgrid of -emittance*bmag outputs used to train NN prior mean models. 
-- model<num_samples_per_varialbe>_<num_hidden_layers>
+- model<num_samples_per_variable>_<num_hidden_layers>hidden_<num_nodes_per_hidden_layer>nodes_<num_epochs>epoch_<learning_rate>_<cutoff_value>** where the model is trained on samples where outputs are in the range [cutoff_value, 0] or [-20, 0] if cutoff_value is not specified. 
 -  **model<num_samples_per_variable>_<num_hidden_layers>hidden_<num_nodes_per_hidden_layer>nodes_<num_epochs>epoch_<learning_rate>_<cutoff_value>** where the model is trained on samples where outputs are in the range [cutoff_value, 0] or [-20, 0] if cutoff_value is not specified. 
 - **transformer_y_<num_samples_per_variable>^9_<cutoff_value>** corresponds to models that have the same num_samples_per_variable and cutoff_value. 
 - **surr_const_<model_names**>.pt**: BO comparison performance data where the BO runs with the following prior means are being compared
