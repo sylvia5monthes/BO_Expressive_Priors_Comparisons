@@ -11,7 +11,7 @@ $ conda conda create --name injmodel --file injmodel.txt
 ```
 
 ## Basic Usage
-A [3 variable BO example](https://github.com/sylvia5monthes/lcls_cu_injector_ml_model/blob/47486ecf454a0bb2088b07fc1163f94eba20fbc1/injector_surrogate/injector_emit_prediction_BO_3var_pytorch_example.ipynb) shows how to optimize emittance values from the pytorch version of the injector surrogate. 
+A [3 variable BO example](https://github.com/sylvia5monthes/lcls_cu_injector_ml_model/blob/47486ecf454a0bb2088b07fc1163f94eba20fbc1/injector_surrogate/injector_emit_prediction_BO_3var_pytorch_example.ipynb) shows how to optimize emittance values from the [pytorch version of the injector surrogate](https://github.com/sylvia5monthes/lcls_cu_injector_ml_model/blob/a1ff4a70c573692304d8741461408cdbce9eced9/injector_surrogate/pytorch_injector_surrogate_model.py). 
 
 A [9 variable BO example](https://github.com/sylvia5monthes/lcls_cu_injector_ml_model/blob/47486ecf454a0bb2088b07fc1163f94eba20fbc1/injector_surrogate/injector_emit_prediction_BO_9var_pytorch_example.ipynb) shows how to optimize emittance*bmag values calculated from the pytorch version of the injector surrogate. 
 
