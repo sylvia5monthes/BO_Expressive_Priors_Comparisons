@@ -3,11 +3,11 @@ Working repo for the LCLS Cu line injector NN surrogate model for ML testing
 
 ## Environment
 ```bash
-$ conda env create -f baxenv.yml
+$ conda env create -f injmodel.yml
 ```
 or
 ```bash
-$ conda conda create --name baxenv --file baxenv.txt
+$ conda conda create --name injmodel --file injmodel.txt
 ```
 
 ## Basic Usage
