@@ -3,13 +3,13 @@ import torch.nn as nn
 
 from tensorflow.keras.layers import InputLayer, Dense, Dropout
 
-class Surrogate_NN_PyTorch(nn.Module):
+class Injector_Surrogate_NN_PyTorch(nn.Module):
     def __init__(self, model=None):
         """
         creates Pytorch version of specified model 
         :param model: the model to be recreated 
         """
-        super(Surrogate_NN_PyTorch, self).__init__()
+        super(Injector_Surrogate_NN_PyTorch, self).__init__()
 
         self.modules = []
 
