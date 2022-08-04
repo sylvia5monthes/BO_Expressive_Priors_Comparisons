@@ -1,5 +1,5 @@
 # BO_Expressive_Priors_Comparisions
-Working repo for the LCLS Cu line injector NN surrogate model for ML testing
+Working repo for the LCLS Cu line injector NN surrogate model for ML testing, Bayesian Optimization Prior Mean Optimization
 
 ## Environment
 ```bash
