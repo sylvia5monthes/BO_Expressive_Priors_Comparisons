@@ -21,6 +21,6 @@ $ conda conda create --name injmodel --file injmodel.txt
 - **grid<num_samples_per_variable>^9.pt** stores the <num_samples_per_variable>^9 meshgrid of -emittance*bmag outputs used to train NN prior mean models.
 - **model<num_samples_per_variable>\_<num_hidden_layers>hidden\_<num_nodes_per_hidden_layer>nodes\_<num_epochs>epoch\_<learning_rate>\_<cutoff_value>** where the model is trained on samples where outputs are in the range [cutoff_value, 0] or [-20, 0] if cutoff_value is not specified. 
 - **transformer_y_<num_samples_per_variable>^9_<cutoff_value>** corresponds to models that have the same num_samples_per_variable and cutoff_value. 
-- **surr_const_<model_names**>.pt**: BO comparison performance data where the BO runs with the following prior means are being compared
+- **surr_const_<model_names**>.pt: BO comparison performance data where the BO runs with the following prior means are being compared
 
 For more details on the injector tuning and the capabilties of the model, see the [lcls_cu_injector_tuning repo](https://github.com/slaclab/lcls_cu_injector_tuning/).
