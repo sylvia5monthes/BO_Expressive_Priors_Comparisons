@@ -1,4 +1,4 @@
-# LCLS Cu Injector Model for ML Testing
+# BO_Expressive_Priors_Comparisions
 Working repo for the LCLS Cu line injector NN surrogate model for ML testing
 
 ## Environment
