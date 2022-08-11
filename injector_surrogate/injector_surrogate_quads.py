@@ -117,7 +117,8 @@ class Surrogate_NN:
             
             scale = torch.as_tensor(scale) if self.pytorch == True else np.asarray(scale)
             
-            x[:,col] =  x[:,col] * scale
+            with torch.no_grad():
+                x[:,col] =  x[:,col] * scale
             
             if self.debug:
                 print('small scale units',x)
@@ -138,7 +139,7 @@ class Surrogate_NN:
             
     def pred_raw_units(self, x):
     
-            y = self.model_1.predict(x)
+            y = self.model_1(x.float()) if self.pytorch == True else self.model_1.predict(x)
 
             return y
 

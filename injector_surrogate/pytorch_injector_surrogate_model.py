@@ -60,12 +60,12 @@ class MinMaxScaler_PyTorch(object):
         self.min = torch.tensor(transformer.min_)
 
     def transform(self, x): 
-        x *= self.scale
-        x += self.min
+        x = x * self.scale
+        x = x + self.min
         return x
     
     def inverse_transform(self, x):
-        x -= self.min
-        x /= self.scale
+        x = x - self.min
+        x = x / self.scale
         return x
     
